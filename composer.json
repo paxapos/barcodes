@@ -1,0 +1,16 @@
+{
+	"name": "ristorantino/ristorantino-barcode-plugin",
+	"description": "Ristorantino Mágico Barcode Generator Plugin",
+	"type": "cakephp-plugin",
+	"homepage": "http://github.com/ristorantino/ristorantino-barcode-plugin",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Ale Vilar",
+			"email": "alevilar@gmail.com",
+			"homepage": "http://alevilar.com"
+		}
+	],
+	"require": {		
+	}
+}
