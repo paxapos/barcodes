@@ -49,7 +49,6 @@ class BarcodeHelper extends AppHelper {
 	}
 
 
-
 	/**
 	* 	standard 2 of 5 (std25)
 	* 	interleaved 2 of 5 (int25)
@@ -64,7 +63,7 @@ class BarcodeHelper extends AppHelper {
 	* 	msi (msi)
 	* 	datamatrix (datamatrix)
 	**/
-	public function dataImage ( $type, $code, $ops ) {
+	public function __getImage ( $type, $code, $ops ) {
 		
 		 if ( is_array($code )) {
 		 	$code = $this->setCodeData( $code );
@@ -122,7 +121,25 @@ class BarcodeHelper extends AppHelper {
 		   // $this->__drawCross($im, $blue, $data['p'.$i]['x'], $data['p'.$i]['y']);
 		  }
 		  
-		  // -------------------------------------------------- //
+		  return $im;		  
+	}
+
+
+	public function rawImage ( $type, $code, $ops ) {
+		$im = $this->__getImage( $type, $code, $ops );
+
+		$thumb = imagecreatetruecolor($ops['raw_width'], $ops['raw_heigth']);
+
+		imagecopyresized($thumb, $im, 0, 0, 0, 0, $ops['raw_width'], $ops['raw_heigth'], $this->imageWidth, $this->imageHeigth);
+
+		return $thumb;
+	}
+
+
+	public function dataImage ( $type, $code, $ops ) {
+		
+		$im = $this->__getImage( $type, $code, $ops );
+		// -------------------------------------------------- //
 		  //                    GENERATE
 		  // -------------------------------------------------- //
 		  // header('Content-type: image/gif');
@@ -134,15 +151,19 @@ class BarcodeHelper extends AppHelper {
 		  $fcon = file_get_contents( $tmpFilename );
 		  imagedestroy($im);
 
+			$mimetype = mime_content_type($tmpFilename);
+			if (empty($mimetype)) {
+				$mimetype = 'jpeg';
+			}
 		  $media = array(
-		  	'type' => 'jpg',
+		  	'type' => $mimetype,
 		  	'file' =>  $fcon
 		  	);
-
 
 		  $pxiimg = $this->PxHtml->imageData( $media, $ops );
 		
 		  return $pxiimg;
+
 	}
 
 
